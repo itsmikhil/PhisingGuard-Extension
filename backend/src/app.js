@@ -7,6 +7,7 @@ const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
 const scanRoutes = require("./routes/scan.routes");
 const adminRoutes = require("./routes/admin.routes");
+const extensionRoutes = require("./routes/extension.routes");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/scan", scanRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/extension", extensionRoutes);
 
 app.get("/api/health", (req, res) => {
   res.status(200).json({
