@@ -3,9 +3,9 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
 const {
-    getProfile,
-    getHistory,
-    getStats
+  getProfile,
+  getHistory,
+  getStats,
 } = require("../controllers/user.controller");
 
 router.get("/profile", auth, getProfile);

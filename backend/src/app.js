@@ -5,6 +5,7 @@ const morgan = require("morgan");
 
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
+const scanRoutes = require("./routes/scan.routes");
 
 const app = express();
 
@@ -18,12 +19,13 @@ app.use(morgan("dev"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/scan", scanRoutes);
 
 app.get("/api/health", (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: "Backend is running."
-    });
+  res.status(200).json({
+    success: true,
+    message: "Backend is running.",
+  });
 });
 
 module.exports = app;
