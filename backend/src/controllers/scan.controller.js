@@ -1,4 +1,9 @@
 const Scan = require("../models/Scan");
+const { normalizeUrl } = require("../utils/urlNormalizer");
+const {
+  getCachedResult,
+  saveCachedResult,
+} = require("../services/detection/cacheService");
 const { analyzeUrl } = require("../services/detection/ruleEngine");
 const { checkThreatIntel } = require("../services/detection/threatIntel");
 const {
@@ -36,14 +41,45 @@ const scanUrl = async (req, res) => {
       });
     }
 
+    const normalizedUrl = normalizeUrl(url);
+    const cachedResult = await getCachedResult(normalizedUrl);
+
+    if (cachedResult) {
+      const scan = await Scan.create({
+        user: req.user.id,
+        url: normalizedUrl,
+        riskScore: cachedResult.riskScore,
+        verdict: cachedResult.verdict,
+        reasons: cachedResult.reasons,
+        source: "extension",
+      });
+
+      return res.status(200).json({
+        success: true,
+        data: {
+          url: scan.url,
+          riskScore: scan.riskScore,
+          verdict: scan.verdict,
+          explanation: cachedResult.explanation,
+        },
+      });
+    }
+
     const ruleResult = await analyzeUrl(url);
     const threatResult = await checkThreatIntel(url);
     const finalResult = calculateFinalScore(ruleResult, threatResult);
     const explanation = generateExplanation(finalResult);
 
+    await saveCachedResult(normalizedUrl, {
+      riskScore: finalResult.riskScore,
+      verdict: finalResult.verdict,
+      reasons: finalResult.reasons,
+      explanation,
+    });
+
     const scan = await Scan.create({
       user: req.user.id,
-      url,
+      url: normalizedUrl,
       riskScore: finalResult.riskScore,
       verdict: finalResult.verdict,
       reasons: finalResult.reasons,
