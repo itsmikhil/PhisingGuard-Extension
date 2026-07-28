@@ -1,40 +1,41 @@
 const Blacklist = require("../../../models/Blacklist");
+const ThreatProvider = require("./threatProvider");
 
-const check = async (url) => {
-  try {
-    const parsedUrl = new URL(url);
-    const hostname = parsedUrl.hostname.toLowerCase();
+class LocalBlacklistProvider extends ThreatProvider {
+  async checkUrl(url) {
+    try {
+      const parsedUrl = new URL(url);
+      const hostname = parsedUrl.hostname.toLowerCase();
 
-    const blacklistEntry = await Blacklist.findOne({
-      domain: hostname,
-      active: true,
-    });
+      const blacklistEntry = await Blacklist.findOne({
+        domain: hostname,
+        active: true,
+      });
 
-    if (blacklistEntry) {
+      if (blacklistEntry) {
+        return {
+          status: "PHISHING",
+          provider: "Local Blacklist",
+          reason: "Domain exists in local blacklist.",
+          confidence: 100,
+        };
+      }
+
       return {
-        malicious: true,
-        confidence: 100,
-        source: "Local Blacklist",
-        reasons: ["Domain exists in local blacklist."],
+        status: "SAFE",
+        provider: "Local Blacklist",
+        reason: "",
+        confidence: 0,
+      };
+    } catch (err) {
+      return {
+        status: "SAFE",
+        provider: "Local Blacklist",
+        reason: "",
+        confidence: 0,
       };
     }
-
-    return {
-      malicious: false,
-      confidence: 0,
-      source: "Local Blacklist",
-      reasons: [],
-    };
-  } catch (err) {
-    return {
-      malicious: false,
-      confidence: 0,
-      source: "Local Blacklist",
-      reasons: [],
-    };
   }
-};
+}
 
-module.exports = {
-  check,
-};
+module.exports = new LocalBlacklistProvider();
