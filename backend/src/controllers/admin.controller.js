@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Scan = require("../models/Scan");
 const Blacklist = require("../models/Blacklist");
+const Report = require("../models/Report");
 
 const getDashboard = async (req, res) => {
   try {
@@ -164,10 +165,98 @@ const deleteBlacklistEntry = async (req, res) => {
   }
 };
 
+const getReports = async (req, res) => {
+  try {
+    const { status } = req.query;
+    const filter = status ? { status } : {};
+
+    const reports = await Report.find(filter)
+      .populate("user", "name email")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      data: reports,
+    });
+  } catch (err) {
+    console.log(err);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+const updateReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, adminRemark } = req.body;
+
+    if (!status || !["APPROVED", "REJECTED"].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status value.",
+      });
+    }
+
+    const report = await Report.findById(id);
+    if (!report) {
+      return res.status(404).json({
+        success: false,
+        message: "Report not found.",
+      });
+    }
+
+    const updatedReport = await Report.findByIdAndUpdate(
+      id,
+      {
+        status,
+        adminRemark: adminRemark || "",
+        reviewedBy: req.user.id,
+        reviewedAt: new Date(),
+      },
+      { new: true },
+    );
+
+    if (status === "APPROVED") {
+      const parsedUrl = new URL(report.url);
+      const hostname = parsedUrl.hostname.toLowerCase();
+
+      const existingEntry = await Blacklist.findOne({
+        domain: hostname,
+        active: true,
+      });
+      if (!existingEntry) {
+        await Blacklist.create({
+          domain: hostname,
+          reason: report.reason,
+          source: "User Report",
+          active: true,
+        });
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: updatedReport,
+    });
+  } catch (err) {
+    console.log(err);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
 module.exports = {
   getDashboard,
   getBlacklist,
   createBlacklistEntry,
   updateBlacklistEntry,
   deleteBlacklistEntry,
+  getReports,
+  updateReport,
 };

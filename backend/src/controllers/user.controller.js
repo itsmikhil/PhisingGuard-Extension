@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Scan = require("../models/Scan");
+const Report = require("../models/Report");
 
 const getProfile = async (req, res) => {
   try {
@@ -101,8 +102,77 @@ const getStats = async (req, res) => {
   }
 };
 
+const createReport = async (req, res) => {
+  try {
+    const { url, reason } = req.body;
+
+    if (!url) {
+      return res.status(400).json({
+        success: false,
+        message: "URL is required.",
+      });
+    }
+
+    let parsedUrl;
+    try {
+      parsedUrl = new URL(url);
+    } catch (err) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide a valid HTTP or HTTPS URL.",
+      });
+    }
+
+    if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide a valid HTTP or HTTPS URL.",
+      });
+    }
+
+    if (!reason) {
+      return res.status(400).json({
+        success: false,
+        message: "Reason is required.",
+      });
+    }
+
+    const existingPendingReport = await Report.findOne({
+      user: req.user.id,
+      url: url.trim(),
+      status: "PENDING",
+    });
+
+    if (existingPendingReport) {
+      return res.status(400).json({
+        success: false,
+        message: "A pending report for this URL already exists.",
+      });
+    }
+
+    const report = await Report.create({
+      user: req.user.id,
+      url: url.trim(),
+      reason: reason.trim(),
+    });
+
+    return res.status(201).json({
+      success: true,
+      data: report,
+    });
+  } catch (err) {
+    console.log(err);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
 module.exports = {
   getProfile,
   getHistory,
   getStats,
+  createReport,
 };
