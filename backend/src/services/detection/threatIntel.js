@@ -12,9 +12,15 @@ const checkThreatIntel = async (url) => {
     const maliciousResults = results.filter((result) => result.malicious);
 
     if (maliciousResults.length > 0) {
-      const highestConfidence = Math.max(...maliciousResults.map((result) => result.confidence));
-      const mergedReasons = [...new Set(maliciousResults.flatMap((result) => result.reasons))];
-      const mergedSources = [...new Set(maliciousResults.map((result) => result.source))];
+      const highestConfidence = Math.max(
+        ...maliciousResults.map((result) => result.confidence),
+      );
+      const mergedReasons = [
+        ...new Set(maliciousResults.flatMap((result) => result.reasons)),
+      ];
+      const mergedSources = [
+        ...new Set(maliciousResults.map((result) => result.source)),
+      ];
 
       return {
         malicious: true,

@@ -1,4 +1,5 @@
-const GOOGLE_SAFE_BROWSING_API_URL = "https://safebrowsing.googleapis.com/v4/threatMatches:find";
+const GOOGLE_SAFE_BROWSING_API_URL =
+  "https://safebrowsing.googleapis.com/v4/threatMatches:find";
 
 const check = async (url) => {
   try {
@@ -31,13 +32,16 @@ const check = async (url) => {
       },
     };
 
-    const response = await fetch(`${GOOGLE_SAFE_BROWSING_API_URL}?key=${apiKey}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${GOOGLE_SAFE_BROWSING_API_URL}?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
       },
-      body: JSON.stringify(requestBody),
-    });
+    );
 
     if (!response.ok) {
       return {
