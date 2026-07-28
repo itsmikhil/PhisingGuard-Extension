@@ -1,5 +1,8 @@
 const Scan = require("../models/Scan");
 const { analyzeUrl } = require("../services/detection/ruleEngine");
+const { checkThreatIntel } = require("../services/detection/threatIntel");
+const { calculateFinalScore } = require("../services/detection/scoreCalculator");
+const { generateExplanation } = require("../services/detection/explanationGenerator");
 
 const scanUrl = async (req, res) => {
   try {
@@ -29,14 +32,17 @@ const scanUrl = async (req, res) => {
       });
     }
 
-    const analysis = await analyzeUrl(url);
+    const ruleResult = await analyzeUrl(url);
+    const threatResult = await checkThreatIntel(url);
+    const finalResult = calculateFinalScore(ruleResult, threatResult);
+    const explanation = generateExplanation(finalResult);
 
     const scan = await Scan.create({
       user: req.user.id,
       url,
-      riskScore: analysis.riskScore,
-      verdict: analysis.verdict,
-      reasons: analysis.reasons,
+      riskScore: finalResult.riskScore,
+      verdict: finalResult.verdict,
+      reasons: finalResult.reasons,
       source: "extension",
     });
 
@@ -46,7 +52,7 @@ const scanUrl = async (req, res) => {
         url: scan.url,
         riskScore: scan.riskScore,
         verdict: scan.verdict,
-        reasons: scan.reasons,
+        explanation,
       },
     });
   } catch (err) {
