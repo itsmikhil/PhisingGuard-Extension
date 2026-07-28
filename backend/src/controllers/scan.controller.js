@@ -1,8 +1,12 @@
 const Scan = require("../models/Scan");
 const { analyzeUrl } = require("../services/detection/ruleEngine");
 const { checkThreatIntel } = require("../services/detection/threatIntel");
-const { calculateFinalScore } = require("../services/detection/scoreCalculator");
-const { generateExplanation } = require("../services/detection/explanationGenerator");
+const {
+  calculateFinalScore,
+} = require("../services/detection/scoreCalculator");
+const {
+  generateExplanation,
+} = require("../services/detection/explanationGenerator");
 
 const scanUrl = async (req, res) => {
   try {
