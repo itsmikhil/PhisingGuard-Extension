@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Scan = require("../models/Scan");
 const Blacklist = require("../models/Blacklist");
 const Report = require("../models/Report");
+const { logEvent } = require("../services/auditLogger");
 
 const getDashboard = async (req, res) => {
   try {
@@ -86,6 +87,12 @@ const createBlacklistEntry = async (req, res) => {
       reason: reason || "Marked as suspicious",
       source: source || "Local",
       active: true,
+    });
+
+    await logEvent("blacklist-created", {
+      adminId: req.user.id,
+      domain: domain.toLowerCase(),
+      source: source || "Local",
     });
 
     return res.status(201).json({
@@ -218,6 +225,12 @@ const updateReport = async (req, res) => {
       },
       { new: true },
     );
+
+    await logEvent("report-reviewed", {
+      adminId: req.user.id,
+      reportId: report._id,
+      status,
+    });
 
     if (status === "APPROVED") {
       const parsedUrl = new URL(report.url);

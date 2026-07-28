@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Scan = require("../models/Scan");
 const Report = require("../models/Report");
+const { logEvent } = require("../services/auditLogger");
 
 const getProfile = async (req, res) => {
   try {
@@ -154,6 +155,11 @@ const createReport = async (req, res) => {
       user: req.user.id,
       url: url.trim(),
       reason: reason.trim(),
+    });
+
+    await logEvent("report-created", {
+      userId: req.user.id,
+      reportId: report._id,
     });
 
     return res.status(201).json({

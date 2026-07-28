@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { logEvent } = require("../services/auditLogger");
 
 const createToken = (user) => {
   return jwt.sign(
@@ -59,6 +60,7 @@ const register = async (req, res) => {
     // Generate JWT
     const token = createToken(user);
     const userData = sanitizeUser(user);
+    await logEvent("register", { userId: user._id, email });
 
     res.status(201).json({
       success: true,
@@ -112,6 +114,7 @@ const login = async (req, res) => {
 
     const token = createToken(user);
     const userData = sanitizeUser(user);
+    await logEvent("login", { userId: user._id, email });
 
     res.status(200).json({
       success: true,
