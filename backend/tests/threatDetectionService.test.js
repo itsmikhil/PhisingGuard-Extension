@@ -1,6 +1,3 @@
-const test = require("node:test");
-const assert = require("node:assert/strict");
-
 const ThreatDetectionService = require("../src/services/detection/threatDetectionService");
 
 class StubProvider {
@@ -13,110 +10,127 @@ class StubProvider {
   }
 }
 
-test("returns local blacklist hit as phishing", async () => {
-  const localProvider = new StubProvider({
-    status: "PHISHING",
-    provider: "Local Blacklist",
-    reason: "Domain exists in local blacklist.",
-    confidence: 100,
-  });
-  const googleProvider = new StubProvider({
-    status: "SAFE",
-    provider: "Google Safe Browsing",
-    reason: "",
-    confidence: 0,
-  });
+describe("Threat detection service", () => {
+  it("returns local blacklist hit as phishing", async () => {
+    const localProvider = new StubProvider({
+      status: "PHISHING",
+      provider: "Local Blacklist",
+      reason: "Domain exists in local blacklist.",
+      confidence: 100,
+    });
+    const googleProvider = new StubProvider({
+      status: "SAFE",
+      provider: "Google Safe Browsing",
+      reason: "",
+      confidence: 0,
+    });
 
-  const service = new ThreatDetectionService({ localProvider, googleProvider });
-  const result = await service.detect("https://bad.example.com");
+    const service = new ThreatDetectionService({
+      localProvider,
+      googleProvider,
+    });
+    const result = await service.detect("https://bad.example.com");
 
-  assert.equal(result.status, "PHISHING");
-  assert.equal(result.provider, "Local Blacklist");
-  assert.equal(result.reason, "Domain exists in local blacklist.");
-});
-
-test("returns safe browsing hit when local provider is clean", async () => {
-  const localProvider = new StubProvider({
-    status: "SAFE",
-    provider: "Local Blacklist",
-    reason: "",
-    confidence: 0,
-  });
-  const googleProvider = new StubProvider({
-    status: "PHISHING",
-    provider: "Google Safe Browsing",
-    reason: "Reported by Google Safe Browsing.",
-    confidence: 100,
+    expect(result.status).toBe("PHISHING");
+    expect(result.provider).toBe("Local Blacklist");
+    expect(result.reason).toBe("Domain exists in local blacklist.");
   });
 
-  const service = new ThreatDetectionService({ localProvider, googleProvider });
-  const result = await service.detect("https://suspicious.example.com");
+  it("returns safe browsing hit when local provider is clean", async () => {
+    const localProvider = new StubProvider({
+      status: "SAFE",
+      provider: "Local Blacklist",
+      reason: "",
+      confidence: 0,
+    });
+    const googleProvider = new StubProvider({
+      status: "PHISHING",
+      provider: "Google Safe Browsing",
+      reason: "Reported by Google Safe Browsing.",
+      confidence: 100,
+    });
 
-  assert.equal(result.status, "PHISHING");
-  assert.equal(result.provider, "Google Safe Browsing");
-});
+    const service = new ThreatDetectionService({
+      localProvider,
+      googleProvider,
+    });
+    const result = await service.detect("https://suspicious.example.com");
 
-test("returns safe result for benign url", async () => {
-  const localProvider = new StubProvider({
-    status: "SAFE",
-    provider: "Local Blacklist",
-    reason: "",
-    confidence: 0,
+    expect(result.status).toBe("PHISHING");
+    expect(result.provider).toBe("Google Safe Browsing");
   });
-  const googleProvider = new StubProvider({
-    status: "SAFE",
-    provider: "Google Safe Browsing",
-    reason: "",
-    confidence: 0,
+
+  it("returns safe result for benign url", async () => {
+    const localProvider = new StubProvider({
+      status: "SAFE",
+      provider: "Local Blacklist",
+      reason: "",
+      confidence: 0,
+    });
+    const googleProvider = new StubProvider({
+      status: "SAFE",
+      provider: "Google Safe Browsing",
+      reason: "",
+      confidence: 0,
+    });
+
+    const service = new ThreatDetectionService({
+      localProvider,
+      googleProvider,
+    });
+    const result = await service.detect("https://safe.example.com");
+
+    expect(result.status).toBe("SAFE");
+    expect(result.provider).toBe("None");
+    expect(result.confidence).toBe(0);
   });
 
-  const service = new ThreatDetectionService({ localProvider, googleProvider });
-  const result = await service.detect("https://safe.example.com");
+  it("returns safe result when provider throws", async () => {
+    const localProvider = {
+      async checkUrl() {
+        throw new Error("boom");
+      },
+    };
+    const googleProvider = {
+      async checkUrl() {
+        throw new Error("boom");
+      },
+    };
 
-  assert.equal(result.status, "SAFE");
-  assert.equal(result.provider, "None");
-  assert.equal(result.confidence, 0);
-});
+    const service = new ThreatDetectionService({
+      localProvider,
+      googleProvider,
+    });
+    const result = await service.detect("https://example.com");
 
-test("returns safe result when provider throws", async () => {
-  const localProvider = {
-    async checkUrl() {
-      throw new Error("boom");
-    },
-  };
-  const googleProvider = {
-    async checkUrl() {
-      throw new Error("boom");
-    },
-  };
+    expect(result.status).toBe("SAFE");
+    expect(result.provider).toBe("None");
+  });
 
-  const service = new ThreatDetectionService({ localProvider, googleProvider });
-  const result = await service.detect("https://example.com");
+  it("returns safe result when provider times out", async () => {
+    const localProvider = {
+      async checkUrl() {
+        return {
+          status: "SAFE",
+          provider: "Local Blacklist",
+          reason: "",
+          confidence: 0,
+        };
+      },
+    };
+    const googleProvider = {
+      async checkUrl() {
+        throw new Error("Timeout");
+      },
+    };
 
-  assert.equal(result.status, "SAFE");
-  assert.equal(result.provider, "None");
-});
+    const service = new ThreatDetectionService({
+      localProvider,
+      googleProvider,
+    });
+    const result = await service.detect("https://timeout.example.com");
 
-test("returns safe result when provider times out", async () => {
-  const localProvider = {
-    async checkUrl() {
-      return {
-        status: "SAFE",
-        provider: "Local Blacklist",
-        reason: "",
-        confidence: 0,
-      };
-    },
-  };
-  const googleProvider = {
-    async checkUrl() {
-      throw new Error("Timeout");
-    },
-  };
-
-  const service = new ThreatDetectionService({ localProvider, googleProvider });
-  const result = await service.detect("https://timeout.example.com");
-
-  assert.equal(result.status, "SAFE");
-  assert.equal(result.provider, "None");
+    expect(result.status).toBe("SAFE");
+    expect(result.provider).toBe("None");
+  });
 });
