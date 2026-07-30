@@ -4,7 +4,7 @@
  * On 401, clears auth state and redirects to /login.
  */
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
+const BASE_URL = "/api/v1";
 
 const getToken = () => localStorage.getItem("pg_token");
 
