@@ -1,9 +1,7 @@
-const requiredEnvVars = [
-  "PORT",
-  "MONGODB_URI",
-  "JWT_SECRET",
-  "GOOGLE_SAFE_BROWSING_API_KEY",
-];
+const requiredEnvVars = ["PORT", "MONGODB_URI", "JWT_SECRET"];
+
+// Optional env vars (logged as warnings if missing)
+const optionalEnvVars = ["GOOGLE_SAFE_BROWSING_API_KEY"];
 
 const validateEnv = () => {
   const missing = requiredEnvVars.filter((key) => !process.env[key]);

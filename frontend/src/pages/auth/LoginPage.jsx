@@ -3,20 +3,31 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Mail, Lock, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 export function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
+    setError("");
+
+    try {
+      await login(email, password);
+      navigate("/dashboard", { replace: true });
+    } catch (err) {
+      setError(err.message || "Invalid email or password.");
+    } finally {
       setIsLoading(false);
-      navigate("/dashboard");
-    }, 1000);
+    }
   };
 
   return (
@@ -26,6 +37,13 @@ export function LoginPage() {
         <p className="text-sm text-slate-400 mt-2">Enter your credentials to access your account</p>
       </div>
 
+      {error && (
+        <div className="mb-5 flex items-center gap-2 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          {error}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="space-y-2">
           <Label htmlFor="email" className="text-slate-300">Email</Label>
@@ -34,7 +52,9 @@ export function LoginPage() {
             <Input
               id="email"
               type="email"
-              placeholder="admin@phishingguard.com"
+              placeholder="demo@phishingguard.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="pl-10 h-11 bg-slate-800/60 border-slate-700 text-white placeholder:text-slate-500 focus-visible:border-blue-500 focus-visible:ring-blue-500/20"
               required
             />
@@ -44,7 +64,7 @@ export function LoginPage() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password" className="text-slate-300">Password</Label>
-            <Link to="/forgot-password" className="text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors">
+            <Link to="/reset-password" className="text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors">
               Forgot password?
             </Link>
           </div>
@@ -54,6 +74,8 @@ export function LoginPage() {
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="pl-10 pr-10 h-11 bg-slate-800/60 border-slate-700 text-white placeholder:text-slate-500 focus-visible:border-blue-500 focus-visible:ring-blue-500/20"
               required
             />

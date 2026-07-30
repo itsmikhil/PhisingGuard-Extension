@@ -14,7 +14,7 @@ export function LandingPage() {
               <div className="bg-blue-600 p-2 rounded-lg text-white">
                 <Shield className="w-6 h-6" />
               </div>
-              <span className="font-bold text-xl text-slate-900 tracking-tight">Phishing Guard</span>
+              <span className="font-bold text-xl text-slate-900 dark:text-white tracking-tight">Phishing Guard</span>
             </div>
             <div className="hidden md:flex space-x-8">
               <a href="#features" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">Features</a>
@@ -45,7 +45,7 @@ export function LandingPage() {
             <Activity className="w-4 h-4" />
             <span>AI-Powered Threat Detection</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-6 max-w-4xl mx-auto leading-tight">
+          <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6 max-w-4xl mx-auto leading-tight">
             Protect your organization from <span className="text-blue-600">advanced phishing</span> attacks.
           </h1>
           <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
@@ -71,7 +71,7 @@ export function LandingPage() {
       <section id="features" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Enterprise-grade protection</h2>
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Enterprise-grade protection</h2>
             <p className="text-slate-500 max-w-2xl mx-auto">Everything you need to secure your digital perimeter against sophisticated social engineering and credential harvesting.</p>
           </div>
 
@@ -80,7 +80,7 @@ export function LandingPage() {
               <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
                 <ShieldAlert className="w-7 h-7" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">Zero-Day Detection</h3>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Zero-Day Detection</h3>
               <p className="text-slate-600 leading-relaxed">Our AI models identify previously unseen phishing campaigns in real-time, blocking threats before they reach your inbox.</p>
             </div>
             
@@ -88,7 +88,7 @@ export function LandingPage() {
               <div className="w-14 h-14 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center mb-6">
                 <Globe className="w-7 h-7" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">Global Threat Intel</h3>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Global Threat Intel</h3>
               <p className="text-slate-600 leading-relaxed">Connected to a worldwide network of threat feeds, continuously updating our blocking rules globally.</p>
             </div>
 
@@ -96,7 +96,7 @@ export function LandingPage() {
               <div className="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6">
                 <Zap className="w-7 h-7" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">Instant URL Scan</h3>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Instant URL Scan</h3>
               <p className="text-slate-600 leading-relaxed">Suspicious links are analyzed in milliseconds, checking domain age, SSL certificates, and hidden redirects.</p>
             </div>
           </div>

@@ -5,8 +5,9 @@ const corsConfig = {
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:5173",
+    "http://localhost",
   ],
-  production: [process.env.CLIENT_ORIGIN || ""].filter(Boolean),
+  production: [process.env.CLIENT_ORIGIN || "http://localhost"].filter(Boolean),
 };
 
 const allowedOrigins = corsConfig[isProduction ? "production" : "development"];

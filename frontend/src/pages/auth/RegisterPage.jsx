@@ -3,20 +3,43 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Mail, Lock, User, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 export function RegisterPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { register } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      await register(name, email, password);
+      navigate("/dashboard", { replace: true });
+    } catch (err) {
+      setError(err.message || "Registration failed. Please try again.");
+    } finally {
       setIsLoading(false);
-      navigate("/dashboard");
-    }, 1000);
+    }
   };
 
   return (
@@ -26,6 +49,13 @@ export function RegisterPage() {
         <p className="text-sm text-slate-400 mt-2">Start protecting your organization today</p>
       </div>
 
+      {error && (
+        <div className="mb-5 flex items-center gap-2 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          {error}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="name" className="text-slate-300">Full Name</Label>
@@ -34,6 +64,8 @@ export function RegisterPage() {
             <Input
               id="name"
               placeholder="John Doe"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="pl-10 h-11 bg-slate-800/60 border-slate-700 text-white placeholder:text-slate-500 focus-visible:border-blue-500 focus-visible:ring-blue-500/20"
               required
             />
@@ -48,6 +80,8 @@ export function RegisterPage() {
               id="email"
               type="email"
               placeholder="john@company.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="pl-10 h-11 bg-slate-800/60 border-slate-700 text-white placeholder:text-slate-500 focus-visible:border-blue-500 focus-visible:ring-blue-500/20"
               required
             />
@@ -61,7 +95,9 @@ export function RegisterPage() {
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
+              placeholder="Min. 6 characters"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="pl-10 pr-10 h-11 bg-slate-800/60 border-slate-700 text-white placeholder:text-slate-500 focus-visible:border-blue-500 focus-visible:ring-blue-500/20"
               required
             />
@@ -83,6 +119,8 @@ export function RegisterPage() {
               id="confirm-password"
               type="password"
               placeholder="••••••••"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className="pl-10 h-11 bg-slate-800/60 border-slate-700 text-white placeholder:text-slate-500 focus-visible:border-blue-500 focus-visible:ring-blue-500/20"
               required
             />

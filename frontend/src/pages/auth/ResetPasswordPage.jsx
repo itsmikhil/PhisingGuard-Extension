@@ -32,7 +32,7 @@ export function ResetPasswordPage() {
           <CheckCircle2 className="w-8 h-8" />
         </div>
 
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
           Password Reset Successfully
         </h2>
 
@@ -46,7 +46,7 @@ export function ResetPasswordPage() {
   return (
     <div className="w-full">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-slate-900">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
           Set new password
         </h2>
 
