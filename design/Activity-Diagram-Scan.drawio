@@ -1,0 +1,92 @@
+<mxfile host="65bd71144e">
+    <diagram id="activity-scan" name="Activity Diagram - URL Scan">
+        <mxGraphModel dx="600" dy="493" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1400" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="start" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000" parent="1" vertex="1">
+                    <mxGeometry x="516" y="30" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="input" value="User/extension submits URL" style="rounded=1;whiteSpace=wrap;html=1" parent="1" vertex="1">
+                    <mxGeometry x="446" y="100" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="valid" value="URL present and HTTP(S)?" style="rhombus;whiteSpace=wrap;html=1" parent="1" vertex="1">
+                    <mxGeometry x="447" y="220" width="170" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="error" value="Return 400 validation error" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" parent="1" vertex="1">
+                    <mxGeometry x="170" y="235" width="180" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="normalize" value="Normalize URL" style="rounded=1;whiteSpace=wrap;html=1" parent="1" vertex="1">
+                    <mxGeometry x="448" y="370" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="cache" value="Cache hit?" style="rhombus;whiteSpace=wrap;html=1" parent="1" vertex="1">
+                    <mxGeometry x="449" y="490" width="170" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="cached" value="Create Scan from cached result" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" parent="1" vertex="1">
+                    <mxGeometry x="170" y="505" width="190" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="rules" value="Run rule analysis and threat intelligence" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" parent="1" vertex="1">
+                    <mxGeometry x="430" y="650" width="210" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="score" value="Calculate final risk score and verdict" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" parent="1" vertex="1">
+                    <mxGeometry x="430" y="770" width="210" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="savecache" value="Save result and explanation to ScanCache" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" parent="1" vertex="1">
+                    <mxGeometry x="430" y="890" width="210" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="scan" value="Create Scan history record" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" parent="1" vertex="1">
+                    <mxGeometry x="430" y="1010" width="210" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="response" value="Return verdict, score, explanation" style="rounded=1;whiteSpace=wrap;html=1" parent="1" vertex="1">
+                    <mxGeometry x="430" y="1130" width="210" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="end" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;strokeWidth=4" parent="1" vertex="1">
+                    <mxGeometry x="520" y="1250" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="a1" style="endArrow=classic" parent="1" source="start" target="input" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a2" style="endArrow=classic" parent="1" source="input" target="valid" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a3" value="no" style="endArrow=classic" parent="1" source="valid" target="error" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a4" value="yes" style="endArrow=classic" parent="1" source="valid" target="normalize" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a5" style="endArrow=classic" parent="1" source="normalize" target="cache" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a6" value="yes" style="endArrow=classic" parent="1" source="cache" target="cached" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a7" value="no" style="endArrow=classic" parent="1" source="cache" target="rules" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a8" style="endArrow=classic" parent="1" source="rules" target="score" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a9" style="endArrow=classic" parent="1" source="score" target="savecache" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a10" style="endArrow=classic" parent="1" source="savecache" target="scan" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a11" style="endArrow=classic" parent="1" source="cached" target="response" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="265" y="980"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="a12" style="endArrow=classic" parent="1" source="scan" target="response" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a13" style="endArrow=classic" parent="1" source="response" target="end" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

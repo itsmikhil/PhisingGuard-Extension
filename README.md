@@ -171,6 +171,126 @@ PhishingGuard aims to become a comprehensive cybersecurity platform by expanding
 
 - **Containerization**: Docker & Docker Compose
 
+## Software Design
+
+PhishingGuard uses a layered, modular architecture. The React dashboard and browser extension act as clients of the Express API. Authentication and validation middleware protect the API boundary, controllers coordinate use cases, detection services isolate URL analysis concerns, and Mongoose models provide the persistence boundary for MongoDB.
+
+### High-Level Architecture
+
+```mermaid
+flowchart LR
+   User[General User] --> UI[React Dashboard]
+   Extension[Browser Extension] --> API[Express REST API]
+   UI --> API
+   Admin[Security Admin] --> UI
+
+   API --> Auth[JWT Auth and Validation Middleware]
+   Auth --> Controllers[Route Controllers]
+
+   Controllers --> Scan[Scan Controller]
+   Controllers --> Reports[User and Admin Controllers]
+   Controllers --> Profile[Auth and Profile Controllers]
+
+   Scan --> Normalize[URL Normalizer]
+   Scan --> Cache[Scan Cache Service]
+   Scan --> Detection[Detection Services]
+   Detection --> Rules[Rule Engine]
+   Detection --> Intel[Threat Intelligence Providers]
+   Detection --> Score[Score Calculator]
+   Detection --> Explain[Explanation Generator]
+
+   Reports --> Models[Mongoose Models]
+   Profile --> Models
+   Scan --> Models
+   Models --> Mongo[(MongoDB)]
+   Intel --> SafeBrowsing[Google Safe Browsing]
+```
+
+**Architecture style:** layered and service-oriented within a modular monolith. This keeps deployment simple while giving the detection pipeline, authentication, reporting, and persistence clear ownership boundaries. Controllers coordinate requests without embedding detection rules; detection services can therefore be tested or replaced independently, and external threat-intelligence providers remain behind a small integration boundary.
+
+### Design Principles Applied
+
+- **Abstraction:** Controllers depend on detection service functions such as URL analysis, threat-intelligence checks, score calculation, and explanation generation rather than implementing those algorithms directly.
+- **Modularity:** Authentication, rate limiting, request validation, scanning, caching, reporting, blacklist management, and audit logging are separated into focused modules.
+- **High cohesion:** Each service has one primary responsibility: `cacheService` manages cached results, the rule engine evaluates URL signals, and controllers handle API use cases.
+- **Low coupling:** MongoDB access is isolated in Mongoose models, external reputation checks are isolated in providers, and the frontend communicates through API modules rather than directly accessing persistence.
+- **Maintainability:** The cache-first scan path reduces repeated provider calls, while explicit verdict and report status values make behavior predictable and easier to extend.
+
+### Editable Draw.io Diagrams
+
+Open any source below in [diagrams.net](https://app.diagrams.net/) to inspect or edit it:
+
+- [Entity Relationship Diagram](design/ERD.drawio)
+- [Context Flow Diagram - Level 0](design/DFD-Context.drawio)
+- [Data Flow Diagram - Level 1 Scan and Report](design/DFD-Level-1-Scan-Report.drawio)
+- [Use Case Model](design/Use-Case-Model.drawio)
+- [Class Model](design/Class-Model.drawio)
+- [Activity Diagram - URL Scan](design/Activity-Diagram-Scan.drawio)
+- [Sequence Diagram - URL Scan](design/Sequence-Diagram-Scan.drawio)
+- [Statechart Diagram - Report Moderation](design/Statechart-Diagram.drawio)
+
+### Diagram Previews
+
+The PNG exports below provide quick previews of the current design diagrams. Click any preview to open its editable Draw.io source.
+
+<details>
+<summary>Entity Relationship Diagram</summary>
+
+[![Entity Relationship Diagram](design/ERD.png)](design/ERD.drawio)
+
+</details>
+
+<details>
+<summary>Context Flow Diagram - Level 0</summary>
+
+[![Context Flow Diagram - Level 0](design/DFD-Context.png)](design/DFD-Context.drawio)
+
+</details>
+
+<details>
+<summary>Data Flow Diagram - Level 1 Scan and Report</summary>
+
+[![Data Flow Diagram - Level 1 Scan and Report](design/DFD-Level-1-Scan-Report.png)](design/DFD-Level-1-Scan-Report.drawio)
+
+</details>
+
+<details>
+<summary>Use Case Model</summary>
+
+[![Use Case Model](design/Use-Case-Model.png)](design/Use-Case-Model.drawio)
+
+</details>
+
+<details>
+<summary>Class Model</summary>
+
+[![Class Model](design/Class-Model.png)](design/Class-Model.drawio)
+
+</details>
+
+<details>
+<summary>Activity Diagram - URL Scan</summary>
+
+[![Activity Diagram - URL Scan](design/Activity-Diagram-Scan.png)](design/Activity-Diagram-Scan.drawio)
+
+</details>
+
+<details>
+<summary>Sequence Diagram - URL Scan</summary>
+
+[![Sequence Diagram - URL Scan](design/Sequence-Diagram-Scan.png)](design/Sequence-Diagram-Scan.drawio)
+
+</details>
+
+<details>
+<summary>Statechart Diagram - Report Moderation</summary>
+
+[![Statechart Diagram - Report Moderation](design/Statechart-Diagram.png)](design/Statechart-Diagram.drawio)
+
+</details>
+
+The diagrams document the current implemented backend and frontend integration. Future capabilities such as email scanning, mobile clients, SIEM integration, and adaptive model training are intentionally excluded from the current design because they are part of the long-term vision rather than the present codebase.
+
 ## 📦 Getting Started
 
 ### Prerequisites

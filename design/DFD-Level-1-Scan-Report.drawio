@@ -1,0 +1,83 @@
+<mxfile host="65bd71144e">
+    <diagram id="dfd-level1" name="DFD - Level 1 Scan and Reporting">
+        <mxGraphModel dx="1700" dy="1397" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="actor" value="User or Browser Extension" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="350" width="100" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1" value="1. Authenticate&#xa;JWT middleware" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" parent="1" vertex="1">
+                    <mxGeometry x="210" y="350" width="150" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2" value="2. Normalize and validate URL" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" parent="1" vertex="1">
+                    <mxGeometry x="460" y="240" width="170" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="cache" value="D1 ScanCache" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" parent="1" vertex="1">
+                    <mxGeometry x="715" y="100" width="170" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3" value="3. Check cache" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" parent="1" vertex="1">
+                    <mxGeometry x="720" y="350" width="150" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4" value="4. Analyze URL&#xa;rules + threat intel" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" parent="1" vertex="1">
+                    <mxGeometry x="960" y="350" width="180" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="ti" value="D2 Google Safe Browsing / local providers" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" parent="1" vertex="1">
+                    <mxGeometry x="950" y="100" width="230" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5" value="5. Calculate score and generate explanation" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" parent="1" vertex="1">
+                    <mxGeometry x="1300" y="350" width="200" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="scan" value="D3 Scan history" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="100" width="170" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="report" value="D4 Reports" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" parent="1" vertex="1">
+                    <mxGeometry x="870" y="650" width="170" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="admin" value="Admin reviewer" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1" parent="1" vertex="1">
+                    <mxGeometry x="1320" y="630" width="80" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" value="credentials + URL/report" style="endArrow=classic;html=1" parent="1" source="actor" target="p1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" value="authenticated request" style="endArrow=classic;html=1" parent="1" source="p1" target="p2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" value="normalized URL" style="endArrow=classic;html=1" parent="1" source="p2" target="p3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" value="hit or miss" style="endArrow=classic;html=1" parent="1" source="p3" target="cache" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" value="cache result or URL" style="endArrow=classic;html=1" parent="1" source="cache" target="p4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" value="reputation query" style="endArrow=classic;html=1" parent="1" source="p4" target="ti" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" value="provider result" style="endArrow=classic;html=1" parent="1" source="ti" target="p4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" value="rules + provider results" style="endArrow=classic;html=1" parent="1" source="p4" target="p5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" value="save result" style="endArrow=classic;html=1" parent="1" source="p5" target="scan" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" value="verdict + explanation" style="endArrow=classic;html=1" parent="1" source="p5" target="actor" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="900" y="490"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e11" value="submit report" style="endArrow=classic;html=1" parent="1" source="actor" target="report" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" value="review queue" style="endArrow=classic;html=1" parent="1" source="report" target="admin" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

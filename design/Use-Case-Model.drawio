@@ -1,0 +1,70 @@
+<mxfile host="65bd71144e">
+    <diagram id="usecase" name="Use Case Model">
+        <mxGraphModel dx="1316" dy="931" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="boundary" value="PhishingGuard Platform" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;verticalAlign=top;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="250" y="40" width="820" height="720" as="geometry"/>
+                </mxCell>
+                <mxCell id="user" value="General User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1" parent="1" vertex="1">
+                    <mxGeometry x="60" y="100" width="100" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="admin" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1" parent="1" vertex="1">
+                    <mxGeometry x="1160" y="290" width="100" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="extension" value="Browser Extension" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1" parent="1" vertex="1">
+                    <mxGeometry x="60" y="520" width="100" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="login" value="Register / Login" style="ellipse;whiteSpace=wrap;html=1" parent="1" vertex="1">
+                    <mxGeometry x="405" y="100" width="170" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="scan" value="Scan URL" style="ellipse;whiteSpace=wrap;html=1" parent="1" vertex="1">
+                    <mxGeometry x="420" y="410" width="150" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="history" value="View scan history and stats" style="ellipse;whiteSpace=wrap;html=1" parent="1" vertex="1">
+                    <mxGeometry x="400" y="190" width="190" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="report" value="Report suspicious URL" style="ellipse;whiteSpace=wrap;html=1" parent="1" vertex="1">
+                    <mxGeometry x="400" y="550" width="190" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="profile" value="Manage profile" style="ellipse;whiteSpace=wrap;html=1" parent="1" vertex="1">
+                    <mxGeometry x="415" y="310" width="160" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="review" value="Review user reports" style="ellipse;whiteSpace=wrap;html=1" parent="1" vertex="1">
+                    <mxGeometry x="730" y="240" width="180" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="blacklist" value="Manage blacklist" style="ellipse;whiteSpace=wrap;html=1" parent="1" vertex="1">
+                    <mxGeometry x="740" y="400" width="170" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="a1" style="endArrow=none;html=1" parent="1" source="user" target="login" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a2" style="endArrow=none;html=1" parent="1" source="user" target="scan" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a3" style="endArrow=none;html=1" parent="1" source="user" target="history" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a4" style="endArrow=none;html=1" parent="1" source="user" target="report" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a5" style="endArrow=none;html=1" parent="1" source="user" target="profile" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a6" style="endArrow=none;html=1" parent="1" source="extension" target="scan" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a7" style="endArrow=none;html=1" parent="1" source="extension" target="report" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a8" style="endArrow=none;html=1" parent="1" source="admin" target="review" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a9" style="endArrow=none;html=1" parent="1" source="admin" target="blacklist" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

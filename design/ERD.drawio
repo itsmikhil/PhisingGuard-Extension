@@ -1,0 +1,52 @@
+<mxfile host="65bd71144e">
+    <diagram id="phishingguard-erd" name="Entity Relationship Diagram">
+        <mxGraphModel dx="849" dy="493" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="user" value="User&#xa;PK _id&#xa;name&#xa;email UNIQUE&#xa;password&#xa;role: user | admin&#xa;safetyScore&#xa;createdAt, updatedAt" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="80" width="210" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="scan" value="Scan&#xa;PK _id&#xa;FK user -&gt; User._id&#xa;url&#xa;riskScore&#xa;verdict: SAFE | SUSPICIOUS | DANGEROUS&#xa;reasons[]&#xa;source: extension | dashboard&#xa;createdAt, updatedAt" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="360" y="40" width="250" height="190" as="geometry"/>
+                </mxCell>
+                <mxCell id="report" value="Report&#xa;PK _id&#xa;FK user -&gt; User._id&#xa;url&#xa;reason&#xa;status: PENDING | APPROVED | REJECTED&#xa;adminRemark&#xa;FK reviewedBy -&gt; User._id&#xa;reviewedAt&#xa;createdAt, updatedAt" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="350" y="330" width="280" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="blacklist" value="Blacklist&#xa;PK _id&#xa;domain UNIQUE&#xa;reason&#xa;source&#xa;active&#xa;createdAt, updatedAt" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="760" y="330" width="210" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="cache" value="ScanCache&#xa;PK _id&#xa;url UNIQUE&#xa;riskScore&#xa;verdict&#xa;reasons[]&#xa;explanation { title, summary, reasons[] }&#xa;expiresAt&#xa;createdAt, updatedAt" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="760" y="40" width="250" height="190" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" value="1 owns many" style="edgeStyle=orthogonalEdgeStyle;endArrow=ERmany;startArrow=ERone;html=1" parent="1" source="user" target="scan" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" value="1 submits many" style="edgeStyle=orthogonalEdgeStyle;endArrow=ERmany;startArrow=ERone;html=1;exitX=0.999;exitY=0.639;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="245.78999999999996" y="213.63" as="sourcePoint"/>
+                        <mxPoint x="387" y="330" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e3" value="admin reviews" style="edgeStyle=orthogonalEdgeStyle;endArrow=ERzeroToMany;startArrow=ERone;html=1" parent="1" source="user" target="report" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="250" y="610"/>
+                            <mxPoint x="700" y="610"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e4" value="approved report creates entry" style="edgeStyle=orthogonalEdgeStyle;endArrow=ERzeroToOne;html=1" parent="1" source="report" target="blacklist" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" value="lookup/save by normalized URL" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;dashed=1;html=1" parent="1" edge="1">
+                    <mxGeometry x="0.0533" y="25" relative="1" as="geometry">
+                        <mxPoint x="610.9999999999998" y="135" as="sourcePoint"/>
+                        <mxPoint x="760.9999999999998" y="135" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -1,0 +1,16 @@
+<mxfile host="app.diagrams.net"><diagram id="dfd-context" name="Context Flow Diagram - Level 0"><mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1400" pageHeight="900"><root>
+<mxCell id="0"/><mxCell id="1" parent="0"/>
+<mxCell id="user" value="General User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1" vertex="1" parent="1"><mxGeometry x="60" y="230" width="80" height="120" as="geometry"/></mxCell>
+<mxCell id="admin" value="Security Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1" vertex="1" parent="1"><mxGeometry x="60" y="520" width="80" height="120" as="geometry"/></mxCell>
+<mxCell id="extension" value="Browser Extension" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1" vertex="1" parent="1"><mxGeometry x="1120" y="180" width="100" height="120" as="geometry"/></mxCell>
+<mxCell id="ti" value="External Threat Intelligence&#xa;Google Safe Browsing" style="shape=datastore;whiteSpace=wrap;html=1" vertex="1" parent="1"><mxGeometry x="1090" y="470" width="190" height="80" as="geometry"/></mxCell>
+<mxCell id="system" value="PhishingGuard Platform&#xa;Authenticate users, scan URLs, explain verdicts, store history, accept reports, and moderate threats" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1"><mxGeometry x="470" y="290" width="420" height="180" as="geometry"/></mxCell>
+<mxCell id="e1" value="credentials, URLs, reports" style="endArrow=classic;html=1" edge="1" parent="1" source="user" target="system"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="e2" value="scan results, history, dashboard data" style="endArrow=classic;html=1" edge="1" parent="1" source="system" target="user"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="e3" value="admin actions and review decisions" style="endArrow=classic;html=1" edge="1" parent="1" source="admin" target="system"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="e4" value="metrics, reports, blacklist status" style="endArrow=classic;html=1" edge="1" parent="1" source="system" target="admin"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="e5" value="scan/report requests and config" style="endArrow=classic;html=1" edge="1" parent="1" source="extension" target="system"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="e6" value="verdict, explanation, health" style="endArrow=classic;html=1" edge="1" parent="1" source="system" target="extension"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="e7" value="URL reputation query" style="endArrow=classic;html=1" edge="1" parent="1" source="system" target="ti"><mxGeometry relative="1" as="geometry"/></mxCell>
+<mxCell id="e8" value="threat status and confidence" style="endArrow=classic;html=1" edge="1" parent="1" source="ti" target="system"><mxGeometry relative="1" as="geometry"/></mxCell>
+</root></mxGraphModel></diagram></mxfile>

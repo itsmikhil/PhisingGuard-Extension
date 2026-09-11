@@ -1,0 +1,94 @@
+<mxfile host="65bd71144e">
+    <diagram id="sequence-scan" name="Sequence Diagram - URL Scan">
+        <mxGraphModel dx="1313" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="actor" value="User / Extension" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1" parent="1" vertex="1">
+                    <mxGeometry x="80" y="30" width="100" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="api" value="Express API" style="swimlane;html=1" parent="1" vertex="1">
+                    <mxGeometry x="300" y="30" width="130" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="scan" value="ScanController" style="swimlane;html=1" parent="1" vertex="1">
+                    <mxGeometry x="520" y="30" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="cache" value="CacheService" style="swimlane;html=1" parent="1" vertex="1">
+                    <mxGeometry x="760" y="30" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="engine" value="Detection Engine" style="swimlane;html=1" parent="1" vertex="1">
+                    <mxGeometry x="1000" y="30" width="160" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="db" value="MongoDB" style="swimlane;html=1" parent="1" vertex="1">
+                    <mxGeometry x="1260" y="30" width="140" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="lifelines" value="" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;fillColor=none;strokeColor=#999999" parent="1" vertex="1">
+                    <mxGeometry x="120" y="110" width="20" height="800" as="geometry"/>
+                </mxCell>
+                <mxCell id="l2" value="" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;fillColor=none;strokeColor=#999999" parent="1" vertex="1">
+                    <mxGeometry x="355" y="110" width="20" height="800" as="geometry"/>
+                </mxCell>
+                <mxCell id="l3" value="" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;fillColor=none;strokeColor=#999999" parent="1" vertex="1">
+                    <mxGeometry x="585" y="110" width="20" height="800" as="geometry"/>
+                </mxCell>
+                <mxCell id="l4" value="" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;fillColor=none;strokeColor=#999999" parent="1" vertex="1">
+                    <mxGeometry x="825" y="110" width="20" height="800" as="geometry"/>
+                </mxCell>
+                <mxCell id="l5" value="" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;fillColor=none;strokeColor=#999999" parent="1" vertex="1">
+                    <mxGeometry x="1070" y="110" width="20" height="800" as="geometry"/>
+                </mxCell>
+                <mxCell id="l6" value="" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;fillColor=none;strokeColor=#999999" parent="1" vertex="1">
+                    <mxGeometry x="1320" y="110" width="20" height="800" as="geometry"/>
+                </mxCell>
+                <mxCell id="m1" value="POST /api/v1/extension/scan { url }" style="endArrow=classic;html=1" parent="1" source="lifelines" target="l2" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="120" y="170" as="sourcePoint"/>
+                        <mxPoint x="355" y="170" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m2" value="auth + validation + scanUrl" style="endArrow=classic;html=1" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="363.96153846153845" y="527" as="sourcePoint"/>
+                        <mxPoint x="594.5" y="527" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m3" value="getCachedResult(normalizedUrl)" style="endArrow=classic;html=1" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="593.6818181818185" y="558" as="sourcePoint"/>
+                        <mxPoint x="834.5" y="558" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m4" value="cache hit? return cached data" style="endArrow=classic;html=1" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="834.5" y="575" as="sourcePoint"/>
+                        <mxPoint x="593.6818181818185" y="575" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m5" value="analyzeUrl + checkThreatIntel" style="endArrow=classic;html=1" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="593.9615384615386" y="540" as="sourcePoint"/>
+                        <mxPoint x="1079.4999999999998" y="540" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m6" value="risk result" style="endArrow=classic;html=1" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1079.4999999999998" y="594" as="sourcePoint"/>
+                        <mxPoint x="593.9615384615386" y="594" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m7" value="save cache + Scan.create" style="endArrow=classic;html=1" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="593.9615384615386" y="612" as="sourcePoint"/>
+                        <mxPoint x="1329.4999999999998" y="612" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m8" value="200 verdict + explanation" style="endArrow=classic;html=1" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="594.5" y="612" as="sourcePoint"/>
+                        <mxPoint x="129.54761904761904" y="612" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

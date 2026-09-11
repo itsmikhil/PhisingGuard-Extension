@@ -1,0 +1,54 @@
+<mxfile host="65bd71144e">
+    <diagram id="class-model" name="Class Model">
+        <mxGraphModel dx="680" dy="559" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="user" value="&lt;&lt;model&gt;&gt; User&#xa;----------------&#xa;+ name: String&#xa;+ email: String&#xa;+ password: String&#xa;+ role: UserRole&#xa;+ safetyScore: Number" style="swimlane;html=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;startSize=125;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="95" width="240" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="scan" value="&lt;&lt;model&gt;&gt; Scan&#xa;----------------&#xa;+ user: ObjectId&#xa;+ url: String&#xa;+ riskScore: Number&#xa;+ verdict: Verdict&#xa;+ reasons: String[]&#xa;+ source: ScanSource" style="swimlane;html=1;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;startSize=130;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="80" width="250" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="r3" value="reviewedBy 0..1" style="endArrow=open;html=1" parent="scan" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="430" y="167" as="sourcePoint"/>
+                        <mxPoint x="-110.00000000000011" y="159.99666666666673" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r2" value="submits 1..*" style="endArrow=diamond;startArrow=none;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" parent="scan" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-110" y="141.99666666666673" as="sourcePoint"/>
+                        <mxPoint x="430" y="144.5" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="report" value="&lt;&lt;model&gt;&gt; Report&#xa;----------------&#xa;+ user: ObjectId&#xa;+ url: String&#xa;+ reason: String&#xa;+ status: ReportStatus&#xa;+ adminRemark: String&#xa;+ reviewedBy: ObjectId&#xa;+ reviewedAt: Date" style="swimlane;html=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;startSize=140;" parent="1" vertex="1">
+                    <mxGeometry x="830" y="45" width="260" height="230" as="geometry"/>
+                </mxCell>
+                <mxCell id="blacklist" value="&lt;&lt;model&gt;&gt; Blacklist&#xa;----------------&#xa;+ domain: String&#xa;+ reason: String&#xa;+ source: String&#xa;+ active: Boolean" style="swimlane;html=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;startSize=110;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="480" width="220" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="cache" value="&lt;&lt;model&gt;&gt; ScanCache&#xa;----------------&#xa;+ url: String&#xa;+ riskScore: Number&#xa;+ verdict: Verdict&#xa;+ reasons: String[]&#xa;+ explanation: Explanation&#xa;+ expiresAt: Date" style="swimlane;html=1;whiteSpace=wrap;fillColor=#e1d5e7;strokeColor=#9673a6;startSize=130;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="480" width="260" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="service" value="&lt;&lt;service&gt;&gt; ScanController&#xa;----------------&#xa;+ scanUrl(req, res)&#xa;+ validate HTTP(S) URL&#xa;+ normalize URL&#xa;+ persist Scan" style="swimlane;html=1;whiteSpace=wrap;fillColor=#f5f5f5;strokeColor=#666666;startSize=100;" parent="1" vertex="1">
+                    <mxGeometry x="1100" y="350" width="250" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1" value="owns 1..*" style="endArrow=diamond;startArrow=none;html=1" parent="1" source="user" target="scan" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="r4" value="reads/writes" style="endArrow=open;html=1" parent="1" source="service" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="640" y="290" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r5" value="uses" style="endArrow=open;html=1" parent="1" source="service" target="cache" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="r6" value="approved reports create" style="endArrow=open;html=1" parent="1" source="report" target="blacklist" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
