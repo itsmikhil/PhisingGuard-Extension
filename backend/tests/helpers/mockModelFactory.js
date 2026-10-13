@@ -103,7 +103,11 @@ const createModelMock = (modelName) => {
       return null;
     }
 
-    const updated = { ...match, ...update, updatedAt: new Date() };
+    const updated = {
+      ...match,
+      ...(update && update.$set ? update.$set : update),
+      updatedAt: new Date(),
+    };
     const index = records.findIndex(
       (record) => record._id.toString() === match._id.toString(),
     );

@@ -12,10 +12,14 @@ const getCachedResult = async (url) => {
     }
 
     const now = new Date();
-    const cacheEntry = await ScanCache.findOne({
+    const cacheQuery = ScanCache.findOne({
       url: normalizedUrl,
       expiresAt: { $gt: now },
-    }).lean();
+    });
+    const cacheEntry =
+      typeof cacheQuery.lean === "function"
+        ? await cacheQuery.lean()
+        : await cacheQuery;
 
     if (!cacheEntry) {
       return null;

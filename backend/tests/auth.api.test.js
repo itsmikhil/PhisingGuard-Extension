@@ -1,6 +1,7 @@
 const request = require("supertest");
 const app = require("../src/app");
 const User = require("../src/models/User");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 describe("Authentication API", () => {
@@ -41,7 +42,7 @@ describe("Authentication API", () => {
     await User.create({
       name: "Test User",
       email: "login@example.com",
-      password: "$2a$10$X2QFwmS8B89yR7AFgFzI8.yk0b1v0e0vRwhE2g4lCYf0eK6ssxkzi",
+      password: await bcrypt.hash("password123", 10),
     });
 
     const response = await request(app)
@@ -56,7 +57,7 @@ describe("Authentication API", () => {
     await User.create({
       name: "Test User",
       email: "badpass@example.com",
-      password: "$2a$10$X2QFwmS8B89yR7AFgFzI8.yk0b1v0e0vRwhE2g4lCYf0eK6ssxkzi",
+      password: await bcrypt.hash("password123", 10),
     });
 
     const response = await request(app)

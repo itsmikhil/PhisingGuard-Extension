@@ -57,7 +57,7 @@ const analyzeUrl = async (url) => {
         lowerUrl.includes(keyword),
       );
       if (foundKeywords.length > 0) {
-        riskScore += 10;
+        riskScore += foundKeywords.length * 10;
         reasons.push("URL contains suspicious keywords");
       }
 
@@ -76,7 +76,7 @@ const analyzeUrl = async (url) => {
   let verdict = "SAFE";
   if (clampedScore >= 60) {
     verdict = "DANGEROUS";
-  } else if (clampedScore >= 30) {
+  } else if (clampedScore >= 20) {
     verdict = "SUSPICIOUS";
   }
 
