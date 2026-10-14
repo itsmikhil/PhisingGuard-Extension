@@ -175,6 +175,8 @@ PhishingGuard aims to become a comprehensive cybersecurity platform by expanding
 
 PhishingGuard uses a layered, modular architecture. The React dashboard and browser extension act as clients of the Express API. Authentication and validation middleware protect the API boundary, controllers coordinate use cases, detection services isolate URL analysis concerns, and Mongoose models provide the persistence boundary for MongoDB.
 
+For implementation-specific extension architecture details, see [System Design: Extension Integration](docs/system-design.md).
+
 ### High-Level Architecture
 
 ```mermaid
