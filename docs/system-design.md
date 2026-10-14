@@ -76,53 +76,63 @@ Google Safe Browsing API is called by provider logic when `GOOGLE_SAFE_BROWSING_
 
 ## Component diagram (Mermaid)
 ```mermaid
+
 flowchart LR
-  subgraph Browser[Browser Context]
-    Ext[Browser Extension Client\n(code not in repo)]
+  subgraph Browser["Browser Context"]
+    Ext["Browser Extension Client<br/>(code not in repo)"]
   end
 
-  subgraph Backend[Backend Node/Express]
-    App[app.js route registration]
-    ExtRoutes[/api/v1/extension/* routes]
-    Auth[auth + validateRequest + requestLogger]
-    RateLimit[rateLimitMiddleware("extension-scan")]
-    ScanCtrl[scan.controller scanUrl]
-    ReportCtrl[user.controller createReport]
+  subgraph Backend["Backend Node.js / Express"]
+    App["app.js<br/>Route Registration"]
+    ExtRoutes["/api/v1/extension/* Routes"]
+    Auth["Authentication + Request Validation<br/>+ Request Logger"]
+    RateLimit["rateLimitMiddleware<br/>(extension-scan)"]
+    ScanCtrl["scan.controller<br/>scanUrl"]
+    ReportCtrl["user.controller<br/>createReport"]
 
-    CacheSvc[cacheService]
-    RuleEngine[ruleEngine]
-    ThreatIntel[threatIntel + threatDetectionService]
-    ScoreCalc[scoreCalculator]
-    Explain[explanationGenerator]
-    Normalize[urlNormalizer]
+    Normalize["urlNormalizer"]
+    CacheSvc["cacheService"]
+    RuleEngine["ruleEngine"]
+    ThreatIntel["threatIntel +<br/>threatDetectionService"]
+    ScoreCalc["scoreCalculator"]
+    Explain["explanationGenerator"]
   end
 
-  subgraph Data[Persistence]
-    ScanModel[(Scan)]
-    CacheModel[(ScanCache)]
-    ReportModel[(Report)]
-    Blacklist[(Blacklist)]
-    Mongo[(MongoDB)]
+  subgraph Data["Persistence Layer"]
+    ScanModel[("Scan Model")]
+    CacheModel[("ScanCache Model")]
+    ReportModel[("Report Model")]
+    Blacklist[("Blacklist Model")]
+    Mongo[("MongoDB")]
   end
 
-  subgraph External[External Service]
-    GSB[Google Safe Browsing API]
+  subgraph External["External Services"]
+    GSB["Google Safe Browsing API"]
   end
 
-  Ext -->|GET/POST extension endpoints + JWT| App
-  App --> ExtRoutes --> Auth
-  Auth -->|scan| RateLimit --> ScanCtrl
-  Auth -->|report| ReportCtrl
+  Ext -->|"GET / POST + JWT"| App
+  App --> ExtRoutes
+  ExtRoutes --> Auth
 
-  ScanCtrl --> Normalize --> CacheSvc
-  CacheSvc <--> CacheModel
+  Auth -->|"Scan request"| RateLimit
+  RateLimit --> ScanCtrl
+  Auth -->|"Report request"| ReportCtrl
+
+  ScanCtrl --> Normalize
+  Normalize --> CacheSvc
+  CacheSvc <-->|"Read / Write cache"| CacheModel
+
   ScanCtrl --> RuleEngine
   ScanCtrl --> ThreatIntel
   ThreatIntel --> Blacklist
   ThreatIntel --> GSB
-  ScanCtrl --> ScoreCalc --> Explain
-  ScanCtrl --> ScanModel
-  ReportCtrl --> ReportModel
+
+  RuleEngine --> ScoreCalc
+  ThreatIntel --> ScoreCalc
+  ScoreCalc --> Explain
+
+  ScanCtrl -->|"Persist scan result"| ScanModel
+  ReportCtrl -->|"Persist report"| ReportModel
 
   ScanModel --> Mongo
   CacheModel --> Mongo
